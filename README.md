@@ -2,8 +2,10 @@
  Final Project for Udacity Course "Backend Development with Node.js" from Merle Keiser
 
  ## Scripts
- Start: npm run start\\
- Build: npm run build\\
+ Start: npm run start
+ 
+ Build: npm run build
+ 
  Run build: node dist/.
  
  Testing: npm run test
