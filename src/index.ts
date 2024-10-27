@@ -2,20 +2,20 @@ import express from 'express';
 import imgUtils from './utilities/imgUtils';
 
 const app = express();
-const port = 3000;
+const port: number = 3000;
 
 app.listen(port, () => {
   console.log(`Server started at http://localhost:${port}`);
 });
 
-app.get('/api/images', async (req, res) => {
+app.get('/api/images', async (req: express.Request, res: express.Response) => {
   try {
-    const filename = String(req.query.filename);
-    const width = Number(req.query.width);
-    const height = Number(req.query.height);
+    const filename: string = String(req.query.filename);
+    const width: number = Number(req.query.width);
+    const height: number = Number(req.query.height);
 
     // validate query parameters
-    const missingParameters = imgUtils.validateQueryParams(
+    const missingParameters: (string | number)[] = imgUtils.validateQueryParams(
       filename,
       width,
       height,
@@ -50,7 +50,7 @@ app.get('/api/images', async (req, res) => {
     }
 
     // resize and cache image, then serve it
-    const transformedImage = await imgUtils.resizeAndCacheImage(
+    const transformedImage: Buffer = await imgUtils.resizeAndCacheImage(
       filePath,
       width,
       height,

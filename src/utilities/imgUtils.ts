@@ -3,8 +3,12 @@ import { promises as fs } from 'fs';
 import path from 'path';
 
 // Validate query parameters
-function validateQueryParams(filename: string, width: number, height: number) {
-  const missingParameters = [];
+function validateQueryParams(
+  filename: string,
+  width: number,
+  height: number,
+): (string | number)[] {
+  const missingParameters: (string | number)[] = [];
   if (filename == 'undefined' || filename === '')
     missingParameters.push('filename');
   if (!width || isNaN(width))
@@ -15,15 +19,22 @@ function validateQueryParams(filename: string, width: number, height: number) {
 }
 
 // Generate file paths
-function generateFilePaths(filename: string, width: number, height: number) {
-  const filePath = path.resolve('./assets/full', `${filename}.jpg`);
-  const resizedFileName = `${filename}_${width}x${height}.jpg`;
-  const resizedFilePath = path.resolve('./assets/thumb/', resizedFileName);
+function generateFilePaths(
+  filename: string,
+  width: number,
+  height: number,
+): { filePath: string; resizedFilePath: string } {
+  const filePath: string = path.resolve('./assets/full', `${filename}.jpg`);
+  const resizedFileName: string = `${filename}_${width}x${height}.jpg`;
+  const resizedFilePath: string = path.resolve(
+    './assets/thumb/',
+    resizedFileName,
+  );
   return { filePath, resizedFilePath };
 }
 
 // Ensure cache directory exists
-async function cacheDirectoryExists() {
+async function cacheDirectoryExists(): Promise<void> {
   try {
     await fs.access('./assets/thumb');
   } catch {
@@ -32,7 +43,7 @@ async function cacheDirectoryExists() {
 }
 
 // Check if file exists
-async function fileExists(filePath: string) {
+async function fileExists(filePath: string): Promise<boolean> {
   try {
     await fs.access(filePath);
     return true;
@@ -47,9 +58,9 @@ async function resizeAndCacheImage(
   width: number,
   height: number,
   resizedFilePath: string,
-) {
+): Promise<Buffer> {
   try {
-    const transformedImage = await sharp(filePath)
+    const transformedImage: Buffer = await sharp(filePath)
       .resize(width, height)
       .jpeg()
       .toBuffer();
